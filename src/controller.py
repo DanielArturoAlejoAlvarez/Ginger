@@ -1,6 +1,6 @@
 from app import *
 
-from flask import request,jsonify
+from flask import request,jsonify,make_response
 
 from models import *
 
@@ -8,6 +8,8 @@ import uuid
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
+# User Controller
 @app.route('/users', methods=['GET'])
 def get_users():
   users=User.query.all()
@@ -47,7 +49,7 @@ def update_user(id):
   username=request.json['usernane']
   password=generate_password_hash(request.json['password'],method='sha256')
   avatar=request.json['avatar']
-  admin=request.json['admin']
+  admin=False
 
   user.public_id=public_id
   user.name=name
@@ -70,3 +72,58 @@ def delete_user(id):
   db.session.commit()
 
   return user_schema.jsonify(user)
+
+
+# Todo Controller
+@app.route('/todos', methods=['GET'])
+def get_todos():
+  todos=Todo.query.all()
+  result = todo_schema.dump(todos)
+  return jsonify(result)
+
+@app.route('/todos/<id>', methods=['GET'])
+def get_todo(id):
+  todo=Todo.query.get(id)
+  return todo_schema.jsonify(todo)
+
+@app.route('/todos', methods=['POST'])
+def create_todo():
+  content=request.json['content']
+  done=False
+  user_id=request.json['user_id']
+  
+
+  new_todo=Todo(content,done,user_id)
+
+  db.session.add(new_todo)
+  db.session.commit()
+
+  return todo_schema.jsonify(new_todo)
+
+
+@app.route('/todos/<id>', methods=['PUT'])
+def update_todo(id):
+  todo=Todo.query.get(id)
+
+  content=request.json['content']
+  done=False
+  user_id=request.json['user_id']
+
+  todo.content=content
+  todo.done=done
+  todo.user_id=user_id
+
+
+  db.session.commit()
+
+  return todo_schema.jsonify(todo)
+
+
+@app.router('/todos/<id>', methods=['DELETE'])
+def delete_todo(id):
+  todo=Todo.query.get(id)
+
+  db.session.delete(todo)
+  db.session.commit()
+
+  return todo_schema.jsonify(todo)
