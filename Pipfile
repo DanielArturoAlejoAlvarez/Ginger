@@ -11,6 +11,8 @@ flask-sqlalchemy = "*"
 flask-marshmallow = "*"
 marshmallow-sqlalchemy = "*"
 pymysql = "*"
+uuid = "*"
+werkzeug = "*"
 
 [requires]
 python_version = "3.7"

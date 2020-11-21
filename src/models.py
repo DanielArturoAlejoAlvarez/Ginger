@@ -19,7 +19,20 @@ class User(db.Model):
     self.avatar=avatar
     self.admin=admin
 
+class Todo(db.Model):
+  id=db.Column(db.Integer, primary_key=True)
+  content=db.Column(db.String(512))
+  done=db.Column(db.Boolean)
+  user_id=db.Column(db.Integer)
+
+  def __init__(self, content,done,user_id):
+    self.content=content
+    self.done=done
+    self.user_id=user_id
+
+
 db.create_all()
+
 
 class UserSchema(ma.Schema):
   class Meta:
@@ -27,3 +40,15 @@ class UserSchema(ma.Schema):
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
+
+class TodoShema(ma.Schema):
+  class Meta:
+    fields = ('id','content','done','user_id')
+
+
+todo_schema = TodoShema()
+todos_schema = TodoShema(many=True)
+
+  
+
+
