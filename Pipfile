@@ -13,6 +13,7 @@ marshmallow-sqlalchemy = "*"
 pymysql = "*"
 uuid = "*"
 werkzeug = "*"
+pyjwt = "*"
 
 [requires]
 python_version = "3.7"
