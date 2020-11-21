@@ -29,7 +29,7 @@ $ git clone https://github.com/DanielArturoAlejoAlvarez/Ginger.git
 
 Follow the following steps and you're good to go! Important:
 
-![alt text]()
+![alt text](https://community.gitpod.io/uploads/default/original/1X/744caf335f006bca50389d73d873afb25bf478ce.gif)
 
 ## Coding
 
