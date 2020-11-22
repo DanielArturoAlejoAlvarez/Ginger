@@ -2,7 +2,7 @@ from app import *
 
 from flask import request,jsonify,make_response
 
-from models import *
+from models.User import *
 
 import jwt
 

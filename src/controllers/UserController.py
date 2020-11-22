@@ -1,5 +1,5 @@
 from flask import request,jsonify
-from models import *
+from models.User import *
 from middlewares.authentication import *
 from werkzeug.security import generate_password_hash
 import uuid

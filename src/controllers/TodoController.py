@@ -1,6 +1,6 @@
 from app import *
 from flask import request,jsonify
-from models import *
+from models.Todo import *
 from middlewares.authentication import *
 
 # Todo Controller
