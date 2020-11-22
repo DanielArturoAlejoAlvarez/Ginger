@@ -4,7 +4,11 @@ from flask_sqlalchemy import SQLAlchemy
 
 from flask_marshmallow import Marshmallow
 
+from flask_cors import CORS
+
 app=Flask(__name__)
+
+CORS(app)
 
 app.config['SECRET_KEY']='RXuwGX6syfZoZ4gi$y8fbkEtDgknmsAcpUyVQRmo'
 app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:Br1tney$2=@localhost/ginger_db'
