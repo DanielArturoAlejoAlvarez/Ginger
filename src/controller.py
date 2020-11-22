@@ -27,7 +27,7 @@ def token_required(f):
 
     try:
       data = jwt.decode(token, app.config['SECRET_KEY'])
-      current_user=User.filter_by(public_id=data['public_id']).filter()
+      current_user=User.query.filter_by(public_id=data['public_id']).first()
 
     except:
       return jsonify({'msg': 'Token is invalid!'}), 401
@@ -39,18 +39,31 @@ def token_required(f):
 
 # User Controller
 @app.route('/v1/users', methods=['GET'])
-def get_users():
+@token_required
+def get_users(current_user):
+
+  if not current_user.admin:
+    return jsonify({'msg': 'Cannot perform that function!'})
+
   users=User.query.all()
   result = users_schema.dump(users)
   return jsonify(result)
 
 @app.route('/v1/users/<id>', methods=['GET'])
-def get_user(id):
+@token_required
+def get_user(current_user, id):
+  if not current_user.admin:
+    return jsonify({'msg': 'Cannot perform that function!'})
+
   user=User.query.get(id)
   return user_schema.jsonify(user)
 
 @app.route('/v1/users', methods=['POST'])
-def create_user():
+@token_required
+def create_user(current_user):
+  if not current_user.admin:
+    return jsonify({'msg': 'Cannot perform that function!'})
+
   public_id=str(uuid.uuid4())
   name=request.json['name']
   email=request.json['email']
@@ -66,9 +79,12 @@ def create_user():
 
   return user_schema.jsonify(new_user)
 
-
 @app.route('/v1/users/<id>', methods=['PUT'])
-def update_user(id):
+@token_required
+def update_user(current_user, id):
+  if not current_user.admin:
+    return jsonify({'msg': 'Cannot perform that function!'})
+
   user=User.query.get(id)
 
   public_id=str(uuid.uuid4())
@@ -91,9 +107,12 @@ def update_user(id):
 
   return user_schema.jsonify(user)
 
-
 @app.route('/v1/users/<id>', methods=['DELETE'])
-def delete_user(id):
+@token_required
+def delete_user(current_user, id):
+  if not current_user.admin:
+    return jsonify({'msg': 'Cannot perform that function!'})
+
   user=User.query.get(id)
 
   db.session.delete(user)
@@ -110,7 +129,7 @@ def login():
   if not auth or not auth.username or not auth.password:
     return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
-  user = User.filter_by(username=auth.username).first()
+  user = User.query.filter_by(username=auth.username).first()
 
   if not user:
     return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
@@ -123,27 +142,35 @@ def login():
   return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
 
-
-
-
 # Todo Controller
 @app.route('/v1/todos', methods=['GET'])
-def get_todos():
+@token_required
+def get_todos(current_user):
+  if not current_user.admin:
+    return jsonify({'msg': 'Cannot perform that function!'})
+
   todos=Todo.query.all()
   result = todos_schema.dump(todos)
   return jsonify(result)
 
 @app.route('/v1/todos/<id>', methods=['GET'])
-def get_todo(id):
+@token_required
+def get_todo(current_user, id):
+  if not current_user.admin:
+    return jsonify({'msg': 'Cannot perform that function!'})
+
   todo=Todo.query.get(id)
   return todo_schema.jsonify(todo)
 
 @app.route('/v1/todos', methods=['POST'])
-def create_todo():
+@token_required
+def create_todo(current_user):
+  if not current_user.admin:
+    return jsonify({'msg': 'Cannot perform that function!'})
+
   content=request.json['content']
   done=False
-  user_id=request.json['user_id']
-  
+  user_id=request.json['user_id']  
 
   new_todo=Todo(content,done,user_id)
 
@@ -152,9 +179,12 @@ def create_todo():
 
   return todo_schema.jsonify(new_todo)
 
-
 @app.route('/v1/todos/<id>', methods=['PUT'])
-def update_todo(id):
+@token_required
+def update_todo(current_user, id):
+  if not current_user.admin:
+    return jsonify({'msg': 'Cannot perform that function!'})
+
   todo=Todo.query.get(id)
 
   content=request.json['content']
@@ -165,14 +195,16 @@ def update_todo(id):
   todo.done=done
   todo.user_id=user_id
 
-
   db.session.commit()
 
   return todo_schema.jsonify(todo)
 
-
 @app.route('/v1/todos/<id>', methods=['DELETE'])
-def delete_todo(id):
+@token_required
+def delete_todo(current_user, id):
+  if not current_user.admin:
+    return jsonify({'msg': 'Cannot perform that function!'})
+
   todo=Todo.query.get(id)
 
   db.session.delete(todo)
