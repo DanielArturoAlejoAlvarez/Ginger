@@ -38,26 +38,26 @@ def token_required(f):
 
 
 # User Controller
-@app.route('/users', methods=['GET'])
+@app.route('/v1/users', methods=['GET'])
 def get_users():
   users=User.query.all()
   result = users_schema.dump(users)
   return jsonify(result)
 
-@app.route('/users/<id>', methods=['GET'])
+@app.route('/v1/users/<id>', methods=['GET'])
 def get_user(id):
   user=User.query.get(id)
   return user_schema.jsonify(user)
 
-@app.route('/users', methods=['POST'])
+@app.route('/v1/users', methods=['POST'])
 def create_user():
   public_id=str(uuid.uuid4())
-  name=request.json['nane']
+  name=request.json['name']
   email=request.json['email']
-  username=request.json['usernane']
+  username=request.json['username']
   password=generate_password_hash(request.json['password'],method='sha256')
   avatar=request.json['avatar']
-  admin=request.json['admin']
+  admin=False
 
   new_user=User(public_id,name,email,username,password,avatar,admin)
 
@@ -67,17 +67,17 @@ def create_user():
   return user_schema.jsonify(new_user)
 
 
-@app.route('/users/<id>', methods=['PUT'])
+@app.route('/v1/users/<id>', methods=['PUT'])
 def update_user(id):
   user=User.query.get(id)
 
   public_id=str(uuid.uuid4())
-  name=request.json['nane']
+  name=request.json['name']
   email=request.json['email']
-  username=request.json['usernane']
+  username=request.json['username']
   password=generate_password_hash(request.json['password'],method='sha256')
   avatar=request.json['avatar']
-  admin=False
+  admin=request.json['admin']
 
   user.public_id=public_id
   user.name=name
@@ -92,7 +92,7 @@ def update_user(id):
   return user_schema.jsonify(user)
 
 
-@app.router('/users/<id>', methods=['DELETE'])
+@app.route('/v1/users/<id>', methods=['DELETE'])
 def delete_user(id):
   user=User.query.get(id)
 
@@ -127,18 +127,18 @@ def login():
 
 
 # Todo Controller
-@app.route('/todos', methods=['GET'])
+@app.route('/v1/todos', methods=['GET'])
 def get_todos():
   todos=Todo.query.all()
-  result = todo_schema.dump(todos)
+  result = todos_schema.dump(todos)
   return jsonify(result)
 
-@app.route('/todos/<id>', methods=['GET'])
+@app.route('/v1/todos/<id>', methods=['GET'])
 def get_todo(id):
   todo=Todo.query.get(id)
   return todo_schema.jsonify(todo)
 
-@app.route('/todos', methods=['POST'])
+@app.route('/v1/todos', methods=['POST'])
 def create_todo():
   content=request.json['content']
   done=False
@@ -153,12 +153,12 @@ def create_todo():
   return todo_schema.jsonify(new_todo)
 
 
-@app.route('/todos/<id>', methods=['PUT'])
+@app.route('/v1/todos/<id>', methods=['PUT'])
 def update_todo(id):
   todo=Todo.query.get(id)
 
   content=request.json['content']
-  done=False
+  done=request.json['done']
   user_id=request.json['user_id']
 
   todo.content=content
@@ -171,7 +171,7 @@ def update_todo(id):
   return todo_schema.jsonify(todo)
 
 
-@app.router('/todos/<id>', methods=['DELETE'])
+@app.route('/v1/todos/<id>', methods=['DELETE'])
 def delete_todo(id):
   todo=Todo.query.get(id)
 
