@@ -10,7 +10,32 @@ import jwt
 
 import datetime
 
+from functools import wraps
+
 from werkzeug.security import generate_password_hash, check_password_hash
+
+# Middleware
+def token_required(f):
+  @wraps(f)
+  def decorated(*args, **kwargs):
+    token=None
+    if 'x-access-token' in request.headers:
+      token=request.headers['x-access-token']
+
+    if not token:
+      return jsonify({'msg': 'Token is missing!'}), 401
+
+    try:
+      data = jwt.decode(token, app.config['SECRET_KEY'])
+      current_user=User.filter_by(public_id=data['public_id']).filter()
+
+    except:
+      return jsonify({'msg': 'Token is invalid!'}), 401
+
+    return f(current_user, *args, **kwargs)
+
+  return decorated
+
 
 # User Controller
 @app.route('/users', methods=['GET'])
@@ -85,7 +110,7 @@ def login():
   if not auth or not auth.username or not auth.password:
     return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
-  user = User.filter_by(name=auth.username).first()
+  user = User.filter_by(username=auth.username).first()
 
   if not user:
     return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
