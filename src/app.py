@@ -17,7 +17,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 db=SQLAlchemy(app)
 ma=Marshmallow(app)
 
-from controller import *
+from controllers.Login import *
+from controllers.User import *
+from controllers.Todo import *
+
 
 if __name__=='__main__':
   app.run(debug=True)
