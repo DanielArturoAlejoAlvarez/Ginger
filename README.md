@@ -25,6 +25,10 @@ Using Postman, Insomnia, Talend API Tester,etc.
 ```html
 $ git clone https://github.com/DanielArturoAlejoAlvarez/Ginger.git
 [NAME APP]
+
+$ pipenv shell
+
+$ pipenv python src/app.py
 ```
 
 Follow the following steps and you're good to go! Important:
