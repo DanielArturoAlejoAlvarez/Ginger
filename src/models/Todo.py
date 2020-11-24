@@ -12,10 +12,10 @@ class Todo(db.Model):
     self.user_id=user_id
 
 
-class TodoShema(ma.Schema):
+class TodoSchema(ma.Schema):
   class Meta:
     fields = ('id','content','done','user_id')
 
 
-todo_schema = TodoShema()
-todos_schema = TodoShema(many=True)
+todo_schema = TodoSchema()
+todos_schema = TodoSchema(many=True)

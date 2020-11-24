@@ -1,5 +1,4 @@
-from app import *
-
+from app import app
 from flask import request,jsonify,make_response
 
 from models.User import *
@@ -9,7 +8,6 @@ import jwt
 import datetime
 
 from werkzeug.security import check_password_hash
-
 
 # Apply Authentication
 @app.route('/login')

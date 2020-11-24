@@ -1,4 +1,4 @@
-from app import *
+from app import app
 
 from flask import request,jsonify
 from models.User import *

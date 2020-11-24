@@ -1,4 +1,3 @@
-from app import *
 from flask import request,jsonify
 from models.Todo import *
 from middlewares.authentication import *
