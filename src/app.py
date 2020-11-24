@@ -22,9 +22,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 db=SQLAlchemy(app)
 ma=Marshmallow(app)
 
-# Generate Tables in DB
-db.create_all()
-
 # All Controllers
 from controllers.LoginController import *
 from controllers.UserController import *

@@ -1,3 +1,4 @@
+from app import app
 from flask import request,jsonify
 from models.Todo import *
 from middlewares.authentication import *
@@ -31,11 +32,12 @@ def create_todo(current_user):
   if not current_user.admin:
     return jsonify({'msg': 'Cannot perform that function!'})
 
+  title=request.json['title']
   content=request.json['content']
   done=False
   user_id=current_user.id  
 
-  new_todo=Todo(content,done,user_id)
+  new_todo=Todo(title,content,done,user_id)
 
   db.session.add(new_todo)
   db.session.commit()
@@ -53,10 +55,12 @@ def update_todo(current_user, id):
   if not todo:
     return jsonify({'msg': 'No todo found!'})
 
+  title=request.json['title']
   content=request.json['content']
   done=request.json['done']
   user_id=current_user.id
 
+  todo.title=title
   todo.content=content
   todo.done=done
   todo.user_id=user_id

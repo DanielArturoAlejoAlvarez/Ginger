@@ -20,15 +20,15 @@ Using SQLite3, PostgreSQL MySQL, MongoDB,etc.
 
 Using Postman, Insomnia, Talend API Tester,etc.
 
+```html
+[x-access-token]: [TOKEN] (headers client rest)
+```
+
 ## Usage
 
 ```html
-$ git clone https://github.com/DanielArturoAlejoAlvarez/Ginger.git
-[NAME APP]
-
-$ pipenv shell
-
-$ pipenv python src/app.py
+$ git clone https://github.com/DanielArturoAlejoAlvarez/Ginger.git [NAME APP] $
+pipenv shell $ pipenv python src/app.py
 ```
 
 Follow the following steps and you're good to go! Important:
@@ -37,13 +37,19 @@ Follow the following steps and you're good to go! Important:
 
 ## Coding
 
+### Config
+
+```python
+DATABASE_URI='mysql+pymysql://{}:{}@{}/{}'.format(DB_USER,DB_PASSWORD,DB_HOST,DB_NAME)
+```
+
 ### Authentication
 
 ```python
 ...
 @app.route('/login')
 def login():
-  auth=request.authorization 
+  auth=request.authorization
 
   if not auth or not auth.username or not auth.password:
     return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
@@ -61,9 +67,9 @@ def login():
   return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
 ...
-```
+````
 
-### Middlewares 
+### Middlewares
 
 ```python
 ...
@@ -89,6 +95,7 @@ def token_required(f):
   return decorated
 ...
 ```
+
 ### Models
 
 ```python
@@ -106,7 +113,7 @@ class User(db.Model):
   def __init__(self, public_id,name,email,username,password,avatar,admin):
     self.public_id=public_id
     self.name=name
-    self.email=email 
+    self.email=email
     self.username=username
     self.password=password
     self.avatar=avatar
@@ -147,7 +154,6 @@ def create_user():
   return user_schema.jsonify(new_user)
 ```
 
-
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/DanielArturoAlejoAlvarez/Ginger. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
@@ -155,4 +161,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/Daniel
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-````
+
+```
+
+```

@@ -1,3 +1,4 @@
+from app import app
 from flask import request,jsonify
 from models.User import *
 from middlewares.authentication import *
@@ -26,10 +27,10 @@ def get_user(current_user, id):
   return user_schema.jsonify(user)
 
 @app.route('/v1/users', methods=['POST'])
-@token_required
-def create_user(current_user):
-  if not current_user.admin:
-    return jsonify({'msg': 'Cannot perform that function!'})
+#@token_required
+def create_user():
+  # if not current_user.admin:
+  #   return jsonify({'msg': 'Cannot perform that function!'})
 
   public_id=str(uuid.uuid4())
   name=request.json['name']
