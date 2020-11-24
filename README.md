@@ -113,11 +113,25 @@ class User(db.Model):
   def __init__(self, public_id,name,email,username,password,avatar,admin):
     self.public_id=public_id
     self.name=name
-    self.email=email
+    self.email=email 
     self.username=username
     self.password=password
     self.avatar=avatar
     self.admin=admin
+
+  def __repr__(self):
+    return '<User> %r' % self.name
+
+# Generate Tables in DB
+db.create_all()
+
+# Schema
+class UserSchema(ma.Schema):
+  class Meta:
+    fields = ('id','public_id','name','email','username','password','avatar','admin')
+
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
 ...
 ```
 
